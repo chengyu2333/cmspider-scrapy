@@ -7,18 +7,10 @@
 from . import settings
 from scrapy.exceptions import DropItem
 from pymongo import MongoClient
-from pymongo.helpers import DuplicateKeyError
+from pymongo.errors import DuplicateKeyError
 
 
 class CmspiderPipeline(object):
-
-    col_name = "article"
-
-    def process_item(self, item, spider):
-        return item
-
-
-class CmsListPipeline(object):
     def __init__(self):
         self.ids_seen = set()
         host = settings.MONGODB_HOST
@@ -38,7 +30,12 @@ class CmsListPipeline(object):
             else:
                 self.ids_seen.add(item['href'])
                 url = dict(item)
-                self.urls.insert(url)
+                try:
+                    self.urls.insert(url)
+                except DuplicateKeyError as dk:
+                    pass
+                except Exception as e:
+                    raise
                 return item
         elif spider.name == "cms_article":
             if item['url'] in self.ids_seen:

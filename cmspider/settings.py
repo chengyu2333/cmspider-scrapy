@@ -70,7 +70,7 @@ DOWNLOADER_MIDDLEWARES = {
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
     # 'cmspider.pipelines.CmspiderPipeline': 300,
-    'cmspider.pipelines.CmsListPipeline': 100,
+    'cmspider.pipelines.CmspiderPipeline': 100,
 }
 
 MONGODB_HOST = "192.168.1.34"

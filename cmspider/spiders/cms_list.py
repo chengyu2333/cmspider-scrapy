@@ -18,15 +18,26 @@ class CmsListSpider(scrapy.Spider):
 
     def __init__(self):
         super(CmsListSpider, self).__init__()
-        chrome_opt = webdriver.ChromeOptions()
-        prefs = {"profile.managed_default_content_settings.images" : 2}
-        chrome_opt.add_experimental_option("prefs", prefs)
-        self.driver = webdriver.Chrome(chrome_options=chrome_opt)
-        self.driver.set_page_load_timeout(100)
 
-
-    def get_driver(self):
-        return self.driver
+    def get_driver(self, driver="Chrome"):
+        if driver == "Chrome":
+            chrome_opt = webdriver.ChromeOptions()
+            prefs = {"profile.managed_default_content_settings.images": 2}
+            chrome_opt.add_experimental_option("prefs", prefs)
+            driver = webdriver.Chrome(chrome_options=chrome_opt)
+        elif driver == "PhantomJS":
+            # custom header
+            from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+            dcap = dict(DesiredCapabilities.PHANTOMJS)
+            dcap["phantomjs.page.settings.loadImages"] = False
+            dcap["phantomjs.page.settings.userAgent"] = (
+                "Mozilla/5.0 (Linux; Android 5.1.1; Nexus 6 Build/LYZ28E) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.23 Mobile Safari/537.36"
+            )
+            driver = webdriver.PhantomJS(desired_capabilities=dcap)
+        else:
+            return None
+        driver.set_page_load_timeout(100)
+        return driver
 
     def get_next_page_css(self):
         return cms_config.next_page_css

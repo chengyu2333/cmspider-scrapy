@@ -4,13 +4,21 @@
 
 ## 使用说明
 
-爬取列表页
+- 爬取列表页
 
-`scrapy crawl cms_list`
+    `scrapy crawl cms_list`
 
-爬取新闻页
+- 爬取新闻页
 
-`scrapy crawl cms_article`
+    `scrapy crawl cms_article`
+
+- 更换浏览器引擎
+
+    为方便观察调试，默认使用的Chrome浏览器，需要安装chrome driver。
+    
+    若想使用PhantomJS或其他浏览器可以修改cms_list.py中的get_driver方法。
+
+
 
 ## 配置说明
 settings.py

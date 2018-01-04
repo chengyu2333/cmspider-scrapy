@@ -19,8 +19,9 @@ class CmsArticleSpider(scrapy.Spider):
         self.source = None
 
     def start_requests(self):
-
-        urls = self.col_url.find({"$or": [{"status": {"$exists": False}}, {"status": 0}]}).limit(100)
+        # 一次取出带爬URL的数量
+        limit = 100
+        urls = self.col_url.find({"$or": [{"status": {"$exists": False}}, {"status": 0}]}).limit(limit)
         for url in urls:
             print(url)
             self.source = url['source']
